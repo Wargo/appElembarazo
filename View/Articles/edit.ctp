@@ -49,6 +49,9 @@ echo $this->Form->inputs(array(
 		'options' => array(
 			'es' => __('Español', true),
 			'it' => __('Italiano', true),
+			'en' => __('Inglés', true),
+			'ge' => __('Alemán', true),
+			'pt' => __('Portugués', true),
 		)
 	),
 
@@ -64,8 +67,10 @@ echo $this->Form->inputs(array(
 
 ));
 
-//echo $this->Html->image($this->request->data['Article']['image'], array('width' => 200));
-echo $this->Html->image('/images/' . $id . '.jpg?rnd=' . mt_rand());
+if ($id) {
+	//echo $this->Html->image($this->request->data['Article']['image'], array('width' => 200));
+	echo $this->Html->image('/images/' . $id . '.jpg?rnd=' . mt_rand());
+}
 
 echo $this->Form->end(__('Guardar', true));
 echo $this->Html->link(__('Cancelar', true), array('controller' => 'articles', 'action' => 'index'));

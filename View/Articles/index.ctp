@@ -1,4 +1,7 @@
 <?php
+
+echo $this->Html->link(__('Crear nuevo artículo', true), array('controller' => 'articles', 'action' => 'edit'));
+
 echo '<ul>';
 
 foreach ($articles as $article) {

@@ -1,7 +1,17 @@
 <?php
 class ArticlesController extends AppController {
 
-	function index($lang = 'es') {
+	function index($lang = null) {
+
+		if ($lang) {
+			$this->Session->write('lang', $lang);
+		} else {
+			if ($this->Session->read('lang')) {
+				$lang = $this->Session->read('lang');
+			} else {
+				$lang = 'es';
+			}
+		}
 
 		$articles = $this->Article->find('all', array(
 			'conditions' => array('lang' => $lang),
@@ -41,6 +51,10 @@ class ArticlesController extends AppController {
 		if ($id) {
 
 			$this->request->data = $this->Article->findById($id);
+
+		} else {
+
+			$this->request->data['Article']['lang'] = $this->Session->read('lang');
 
 		}
 
