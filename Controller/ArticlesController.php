@@ -197,7 +197,7 @@ class ArticlesController extends AppController {
 
 	function getImages() {
 
-		//return;
+		return;
 
 		$articles = $this->Article->find('all', array(
 			'conditions' => array(
