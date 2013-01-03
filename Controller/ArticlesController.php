@@ -84,9 +84,10 @@ class ArticlesController extends AppController {
 			$ext = '.' . $ext[count($ext) - 1];
 
 			$Article['image'] = 'http://api.elembarazo.net/images/' . $Article['id'] . $ext;
+			$Article['last'] = false;
 
 			if (!empty($Article['header']) && $aux) {
-				$return[$aux]['last'] = true;
+				$aux['last'] = true;
 			}
 
 			if ($aux) {
@@ -107,10 +108,10 @@ class ArticlesController extends AppController {
 
 		return;
 
-		//$ch = curl_init('http://www.semanasdembarazo.com/appMovil/weeks.php');
-		//$lang = 'es';
-		$ch = curl_init('api.lagravidanza.net/posts/index.json');
-		$lang = 'it';
+		$ch = curl_init('http://www.semanasdembarazo.com/appMovil/weeks.php');
+		$lang = 'es';
+		//$ch = curl_init('api.lagravidanza.net/posts/index.json');
+		//$lang = 'it';
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		$res = json_decode(curl_exec($ch));
@@ -156,10 +157,26 @@ class ArticlesController extends AppController {
 					'image' => !empty($article->image) ? $article->image : null,
 					'parent_id' => $parent_id,
 					'order' => $order,
-					'lang' => $lang
+					'lang' => $lang,
+					'external_id' => $article->ID,
 				);
 
-				$this->Article->create();
+				if ($aux = $this->Article->find('first', array(
+					'conditions' => array(
+						'title' => $article->title,
+						'intro' => $article->intro,
+						'text' => $article->description,
+						'category' => $category,
+						'header' => !empty($article->header) ? $article->header : null,
+						'image' => !empty($article->image) ? $article->image : null,
+						'parent_id' => $parent_id,
+					)
+				))) {
+					$this->Article->id = $aux['Article']['id'];
+				} else {
+					$this->Article->create();
+				}
+
 				$this->Article->save($to_save);
 
 				if ($category == 'mom' || $category == 'baby') {
