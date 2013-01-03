@@ -32,7 +32,9 @@ class ArticlesController extends AppController {
 				$this->Article->create();
 			}
 
-			//$this->Article->save($this->request->data);
+			unset($this->request->data['Article']['image']);
+
+			$this->Article->save($this->request->data);
 
 			if (!$id) {
 				$id = $this->Article->id;
@@ -88,6 +90,22 @@ class ArticlesController extends AppController {
 
 			if (!empty($Article['header']) && $aux) {
 				$aux['last'] = true;
+			}
+
+			if (!empty($Article['urls'])) {
+				$urls = $Article['urls'];
+				$urls = explode("\r\n", $urls);
+
+				$i = 0;
+				$Article['urls'] = array();
+				foreach ($urls as $url) {
+					if ($i %2 == 0) {
+						$aux_url = $url;
+					} else {
+						$Article['urls'][] = array('title' => trim($aux_url), 'url' => trim($url));
+					}
+					$i ++;
+				}
 			}
 
 			if ($aux) {

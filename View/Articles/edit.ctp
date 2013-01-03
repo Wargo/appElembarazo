@@ -40,10 +40,6 @@ echo $this->Form->inputs(array(
 		'label' => __('Orden', true),
 	),
 
-	'url' => array(
-		'label' => __('Enlace', true),
-	),
-
 	'lang' => array(
 		'label' => __('Idioma', true),
 		'options' => array(
@@ -71,6 +67,16 @@ if ($id) {
 	//echo $this->Html->image($this->request->data['Article']['image'], array('width' => 200));
 	echo $this->Html->image('/images/' . $id . '.jpg?rnd=' . mt_rand());
 }
+
+echo $this->Form->inputs(array(
+	'fieldset' => false,
+	'urls' => array(
+		'label' => __('Enlaces', true),
+		'after' => __('Ejemplos:<br />Enlace a Google<br />http://www.google.es<br />Enlace a Facebook<br />http://www.facebook.com', true)
+	),
+));
+
+echo $this->Html->link(__('Añadir más enlaces', true), array('controller' => 'articles', 'action' => 'add_link'), array('style' => 'float: right;'));
 
 echo $this->Form->end(__('Guardar', true));
 echo $this->Html->link(__('Cancelar', true), array('controller' => 'articles', 'action' => 'index'));
