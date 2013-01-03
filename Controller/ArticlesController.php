@@ -62,6 +62,30 @@ class ArticlesController extends AppController {
 
 	}
 
+	function json($lang = null) {
+
+		if (!$lang) $lang = 'es';
+		
+		$articles = $this->Article->find('all', array(
+			'conditions' => array(
+				'lang' => $lang,
+			),
+			'order' => array('order' => 'asc')
+		));
+
+		$return = array();
+
+		foreach ($articles as $article) {
+			extract($article);
+			$return[] = $Article;
+		}
+
+		$this->layout = false;
+
+		$this->set(compact('return'));
+
+	}
+
 	function getImages() {
 
 		return;

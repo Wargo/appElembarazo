@@ -37,7 +37,7 @@ class AppController extends Controller {
 
 	function beforeFilter() {
 
-		if (!in_array($_SERVER['REMOTE_ADDR'], $this->ips)) {
+		if ($this->params['action'] != 'json' && !in_array($_SERVER['REMOTE_ADDR'], $this->ips)) {
 			return $this->redirect('http://elembarazo.net');
 		}
 
