@@ -163,16 +163,17 @@ class ArticlesController extends AppController {
 
 	function getImages() {
 
-		return;
+		//return;
 
 		$articles = $this->Article->find('all', array(
 			'conditions' => array(
-				'lang' => 'it'
+				//'lang' => 'it'
 			)
 		));
 
 		if (!is_dir(WWW_ROOT . 'images')) {
 			mkdir(WWW_ROOT . 'images');
+			die;
 		}
 
 		foreach ($articles as $article) {
