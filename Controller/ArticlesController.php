@@ -77,6 +77,11 @@ class ArticlesController extends AppController {
 
 		foreach ($articles as $article) {
 			extract($article);
+
+			$ext = explode('.', $Article['image']);
+			$ext = '.' . $ext[count($ext) - 1];
+
+			$Article['image'] = 'http://api.elembarazo.net/images/' . $Article['id'] . $ext;
 			$return[] = $Article;
 		}
 
