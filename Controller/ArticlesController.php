@@ -75,6 +75,8 @@ class ArticlesController extends AppController {
 
 		$return = array();
 
+		$aux = null;
+
 		foreach ($articles as $article) {
 			extract($article);
 
@@ -82,8 +84,18 @@ class ArticlesController extends AppController {
 			$ext = '.' . $ext[count($ext) - 1];
 
 			$Article['image'] = 'http://api.elembarazo.net/images/' . $Article['id'] . $ext;
-			$return[] = $Article;
+
+			if (!empty($Article['header']) && $aux) {
+				$return[$aux]['last'] = true;
+			}
+
+			if ($aux) {
+				$return[] = $aux;
+			}
+
+			$aux = $Article;
 		}
+		$return[] = $aux;
 
 		$this->layout = false;
 
