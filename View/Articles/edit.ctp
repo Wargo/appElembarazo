@@ -16,6 +16,10 @@ echo $this->Form->inputs(array(
 		'label' => __('Cabecera', true),
 	),
 
+	'week' => array(
+		'label' => __('Semana nº', true),
+	),
+
 	'intro' => array(
 		'label' => __('Introducción', true),
 	),
@@ -36,10 +40,6 @@ echo $this->Form->inputs(array(
 		),
 	),
 
-	'order' => array(
-		'label' => __('Orden', true),
-	),
-
 	'lang' => array(
 		'label' => __('Idioma', true),
 		'options' => array(
@@ -53,7 +53,8 @@ echo $this->Form->inputs(array(
 
 	'parent_id' => array(
 		'label' => __('Artículo padre', true),
-		'type' => 'text',
+		'options' => $parents,
+		'empty' => 'Ninguno'
 	),
 
 	'image' => array(
@@ -76,7 +77,19 @@ echo $this->Form->inputs(array(
 	),
 ));
 
-echo $this->Html->link(__('Añadir más enlaces', true), array('controller' => 'articles', 'action' => 'add_link'), array('style' => 'float: right;'));
+if (empty($this->request->data['Article']['parent_id'])) {
+	echo $this->Form->inputs(array(
+		'fieldset' => false,
+		'order' => array(
+			'label' => __('Orden', true),
+			'after' => __('Rellenar SÓLO si es un artículo principal', true),
+		),
+	));
+}
 
 echo $this->Form->end(__('Guardar', true));
 echo $this->Html->link(__('Cancelar', true), array('controller' => 'articles', 'action' => 'index'));
+
+if ($id) {
+	echo $this->Html->link(__('BORRAR', true), array('controller' => 'articles', 'action' => 'delete', $id), array('style' => 'color:red; float: right;'), __('Estás seguro?', true));
+}

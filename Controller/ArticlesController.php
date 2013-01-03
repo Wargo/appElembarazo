@@ -10,12 +10,13 @@ class ArticlesController extends AppController {
 				$lang = $this->Session->read('lang');
 			} else {
 				$lang = 'es';
+				$this->Session->write('lang', $lang);
 			}
 		}
 
 		$articles = $this->Article->find('all', array(
 			'conditions' => array('lang' => $lang),
-			'order' => array('order' => 'asc'),
+			'order' => array('week' => 'asc', 'order' => 'asc', 'category' => 'asc'),
 		));
 
 		$this->set(compact('articles'));
@@ -30,6 +31,23 @@ class ArticlesController extends AppController {
 				$this->Article->id = $id;
 			} else {
 				$this->Article->create();
+			}
+
+			if (!empty($this->request->data['Article']['parent_id'])) {
+				$parent = $this->Article->findById($this->request->data['Article']['parent_id']);
+				$this->request->data['Article']['order'] = $parent['Article']['order'];
+			} else {
+				if ($id) {
+					$sons = $this->Article->find('all', array(
+						'conditions' => array(
+							'parent_id' => $id,
+						),
+					));
+
+					$this->Article->updateAll(array('order' => $this->request->data['Article']['order']), array('parent_id' => $id));
+
+				}
+				$this->request->data['Article']['parent_id'] = null;
 			}
 
 			unset($this->request->data['Article']['image']);
@@ -60,7 +78,44 @@ class ArticlesController extends AppController {
 
 		}
 
-		$this->set(compact('id'));
+		$articles = $this->Article->find('all', array(
+			'conditions' => array(
+				'lang' => $this->Session->read('lang'),
+				'parent_id' => null,
+			),
+			'fields' => array('id', 'title', 'header'),
+			'order' => array('week' => 'asc', 'order' => 'asc', 'category' => 'asc'),
+		));
+
+		$parents = array();
+
+		foreach ($articles as $article) {
+			extract($article);
+			if (!empty($Article['header'])) {
+				if (!empty($header)) {
+					$parents[$header] = $array;
+				}
+				$header = $Article['header'];
+				$array = array($Article['id'] => $Article['title']);
+			} else {
+				$array[$Article['id']] = $Article['title'];
+			}
+
+		}
+
+		$this->set(compact('id', 'parents'));
+
+	}
+
+	function delete($id = null) {
+
+		if ($id) {
+
+			$this->Article->delete($id);
+
+			return $this->redirect(array('controller' => 'articles', 'action' => 'index'));
+
+		}
 
 	}
 
@@ -72,7 +127,7 @@ class ArticlesController extends AppController {
 			'conditions' => array(
 				'lang' => $lang,
 			),
-			'order' => array('order' => 'asc')
+			'order' => array('week' => 'asc', 'order' => 'asc', 'category' => 'asc'),
 		));
 
 		$return = array();
