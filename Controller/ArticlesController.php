@@ -86,43 +86,6 @@ class ArticlesController extends AppController {
 
 	}
 
-	function getImages() {
-
-		return;
-
-		$articles = $this->Article->find('all', array(
-			'conditions' => array(
-				'lang' => 'it'
-			)
-		));
-
-		if (!is_dir(WWW_ROOT . 'images')) {
-			mkdir(WWW_ROOT . 'images');
-		}
-
-		foreach ($articles as $article) {
-
-			extract($article);
-
-			$image = str_replace('-150x150', '', $Article['image']);
-
-			$ext = explode('.', $image);
-			$ext = '.' . $ext[count($ext) - 1];
-
-			$ch = curl_init($image);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			$res = curl_exec($ch);
-
-			$file = fopen(WWW_ROOT . 'images' . DS . $Article['id'] . $ext, 'w');
-			fwrite($file, $res);
-			fclose($file);
-
-		}
-
-		die;
-
-	}
-
 	function getData() {
 
 		return;
@@ -191,6 +154,43 @@ class ArticlesController extends AppController {
 		} else {
 
 			echo 'error';
+
+		}
+
+		die;
+
+	}
+
+	function getImages() {
+
+		return;
+
+		$articles = $this->Article->find('all', array(
+			'conditions' => array(
+				'lang' => 'it'
+			)
+		));
+
+		if (!is_dir(WWW_ROOT . 'images')) {
+			mkdir(WWW_ROOT . 'images');
+		}
+
+		foreach ($articles as $article) {
+
+			extract($article);
+
+			$image = str_replace('-150x150', '', $Article['image']);
+
+			$ext = explode('.', $image);
+			$ext = '.' . $ext[count($ext) - 1];
+
+			$ch = curl_init($image);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			$res = curl_exec($ch);
+
+			$file = fopen(WWW_ROOT . 'images' . DS . $Article['id'] . $ext, 'w');
+			fwrite($file, $res);
+			fclose($file);
 
 		}
 

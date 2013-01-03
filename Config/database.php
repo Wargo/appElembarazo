@@ -62,6 +62,17 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
+		'host' => '178.33.115.134',
+		'login' => 'elembarazo_api',
+		'password' => 'dZUTC58DZmGbQ6K4',
+		'database' => 'elembarazo_api',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+
+	public $_default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => 'root',
@@ -70,14 +81,4 @@ class DATABASE_CONFIG {
 		'encoding' => 'utf8',
 	);
 
-	public $test = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'user',
-		'password' => 'password',
-		'database' => 'test_database_name',
-		'prefix' => '',
-		//'encoding' => 'utf8',
-	);
 }
