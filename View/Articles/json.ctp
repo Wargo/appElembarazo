@@ -1,2 +1,2 @@
 <?php
-echo json_encode(array('status' => 'ok', 'data' => $return));
+echo json_encode(array('free' => true, 'status' => 'ok', 'data' => $return));

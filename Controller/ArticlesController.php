@@ -122,19 +122,29 @@ class ArticlesController extends AppController {
 	function json($lang = null) {
 
 		if (!$lang) $lang = 'es';
+
+		$conditions = array(
+			'lang' => $lang,
+		);
+
+		$onlyTips = false;
+
+		if (!empty($this->request->data['onlyTips'])) {
+			//$conditions['category'] = array('tips_mom', 'tips_dad');
+			$onlyTips = true;
+		}
 		
 		$articles = $this->Article->find('all', array(
-			'conditions' => array(
-				'lang' => $lang,
-			),
+			'conditions' => $conditions,
 			'order' => array('week' => 'asc', 'order' => 'asc', 'category' => 'asc'),
 		));
 
 		$return = array();
 
-		$aux = null;
+		$aux_header = $aux = null;
 
 		foreach ($articles as $article) {
+
 			extract($article);
 
 			$ext = explode('.', $Article['image']);
@@ -145,6 +155,20 @@ class ArticlesController extends AppController {
 
 			if (!empty($Article['header']) && $aux) {
 				$aux['last'] = true;
+			}
+
+			if ($onlyTips) {
+				if ($Article['category'] == 'tips_dad' || $Article['category'] == 'tips_mom') {
+					if ($aux_header) {
+						$Article['header'] = $aux_header;
+					}
+					$aux_header = null;
+				} else {
+					if ($Article['header']) {
+						$aux_header = $Article['header'];
+					}
+					continue;
+				}
 			}
 
 			if (!empty($Article['urls'])) {
@@ -168,6 +192,7 @@ class ArticlesController extends AppController {
 			}
 
 			$aux = $Article;
+
 		}
 		$return[] = $aux;
 

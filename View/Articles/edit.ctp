@@ -48,6 +48,7 @@ echo $this->Form->inputs(array(
 			'en' => __('Inglés', true),
 			'ge' => __('Alemán', true),
 			'pt' => __('Portugués', true),
+			'fr' => __('Francés', true),
 		)
 	),
 
