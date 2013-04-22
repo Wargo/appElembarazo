@@ -102,6 +102,7 @@ class ArticlesController extends AppController {
 			}
 
 		}
+		$parents[$header] = $array;
 
 		$this->set(compact('id', 'parents'));
 
@@ -133,6 +134,12 @@ class ArticlesController extends AppController {
 			//$conditions['category'] = array('tips_mom', 'tips_dad');
 			$onlyTips = true;
 		}
+
+		if (!empty($this->request->data['pay']) && $this->request->data['pay'] == true) {
+			$pay = true;
+		} else {
+			$pay = false;
+		}
 		
 		$articles = $this->Article->find('all', array(
 			'conditions' => $conditions,
@@ -147,10 +154,7 @@ class ArticlesController extends AppController {
 
 			extract($article);
 
-			$ext = explode('.', $Article['image']);
-			$ext = '.' . $ext[count($ext) - 1];
-
-			$Article['image'] = 'http://api.elembarazo.net/images/' . $Article['id'] . $ext;
+			$Article['image'] = 'http://api.elembarazo.net/images/' . $Article['id'] . '.jpg';
 			$Article['last'] = false;
 
 			if (!empty($Article['header']) && $aux) {
@@ -194,11 +198,12 @@ class ArticlesController extends AppController {
 			$aux = $Article;
 
 		}
+		$aux['last'] = true;
 		$return[] = $aux;
 
 		$this->layout = false;
 
-		$this->set(compact('return'));
+		$this->set(compact('return', 'pay'));
 
 	}
 
